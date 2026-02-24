@@ -389,6 +389,45 @@ From the order history page, click "Buy Again" on any past order to add all its 
 
 ## Configuration
 
+### Ourguide identity verification
+
+This project supports identifying the currently signed-in user to the Ourguide chat widget using a short-lived JWT. Ourguide can then call protected API routes on behalf of that user by sending this token to our backend.
+
+- **Env**: set `OURGUIDE_AUTH_SECRET` in `.env.local` (HS256 signing secret).
+  - For compatibility, `OURGUIDE_VERIFICATION_SECRET` is also accepted as a fallback.
+
+Example:
+
+```bash
+OURGUIDE_AUTH_SECRET="your-long-random-secret"
+```
+
+#### Token minting endpoint
+
+- `GET /api/ourguide-token`
+  - Requires a normal app auth token (`Authorization: Bearer <app_jwt>`)
+  - Returns `{ token }` where `token` is a JWT with:
+    - `user_id` (required)
+    - `exp` (required, 1 hour)
+    - `email`, `name` (optional)
+
+#### Frontend identify/reset
+
+This is wired in [context/AuthContext.tsx](context/AuthContext.tsx):
+
+- After login (or when already logged in on page load), the app calls `window.ourguide('identify', { token, name })`.
+- It refreshes the token every 50 minutes.
+- On logout (or when auth is cleared), it calls `window.ourguide('resetUser')`.
+
+#### Backend verification (Ourguide calling our API)
+
+Protected routes that use `getAuthUser()` (for example: `PATCH /api/orders/:id` with `{ action: 'cancel' }`) accept either:
+
+- `Authorization: Bearer <app_jwt>` (normal user requests), or
+- `Authorization: Bearer <ourguide_token>` (Ourguide automation), or
+- `X-Ourguide-Token: <ourguide_token>` (alternate header)
+
+
 ### Next.js (`next.config.mjs`)
 - Configured to allow remote images from `picsum.photos`
 

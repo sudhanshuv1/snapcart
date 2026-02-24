@@ -11,6 +11,7 @@ import {
 } from "react";
 import { User, Address } from "@/lib/types";
 import { apiPost, apiGet, apiPut, apiDelete, setToken, clearToken, hasToken } from "@/lib/api";
+import { ourguideIdentify, ourguideResetUser } from "@/lib/ourguideClient";
 
 type PublicUser = Omit<User, "password">;
 
@@ -44,12 +45,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(data.user);
       } catch {
         clearToken();
+        ourguideResetUser();
       } finally {
         setLoading(false);
       }
     }
     hydrate();
   }, []);
+
+  // Identify the user to Ourguide and refresh periodically (token expires in 60 mins)
+  useEffect(() => {
+    if (!user) return;
+
+    const userName = user.name;
+
+    let cancelled = false;
+    let intervalId: number | undefined;
+
+    async function identify() {
+      try {
+        const data = await apiGet<{ token: string }>("/api/ourguide-token");
+        if (cancelled) return;
+        ourguideIdentify({ token: data.token, name: userName });
+      } catch {
+        // Ignore: Ourguide is optional, and /api/ourguide-token may be disabled in some envs
+      }
+    }
+
+    identify();
+    intervalId = window.setInterval(identify, 50 * 60 * 1000);
+
+    return () => {
+      cancelled = true;
+      if (intervalId) window.clearInterval(intervalId);
+    };
+  }, [user?.id, user?.name]);
 
   const signUp = useCallback(
     async (name: string, email: string, dob: string, password: string): Promise<{ success: boolean; error?: string }> => {
@@ -92,6 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = useCallback(() => {
     clearToken();
     setUser(null);
+    ourguideResetUser();
   }, []);
 
   const updateProfile = useCallback(
@@ -130,6 +161,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await apiDelete<{ success: boolean }>("/api/auth/account", { password });
         clearToken();
         setUser(null);
+        ourguideResetUser();
         return { success: true };
       } catch (err) {
         const message = err instanceof Error ? err.message : "Delete failed";

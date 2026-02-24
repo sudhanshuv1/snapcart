@@ -48,7 +48,7 @@ export default function RootLayout({
         <Script
           src="/ourguide-b2b-widget.iife.js"
           data-product-id="prod_c2d6a9b0-2682-420f-8458-9a84b62ee148"
-          data-api-url="https://almightily-unrisky-floy.ngrok-free.dev"
+          data-api-url="http://localhost:3000"
           strategy="afterInteractive"
         />
       </body>
