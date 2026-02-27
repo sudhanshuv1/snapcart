@@ -49,7 +49,7 @@ export default function RootLayout({
         </AuthProvider>
         <Script 
           src="/ourguide-b2b-widget.iife.js"
-          data-api-url="https://ourguide-b2-b.vercel.app/"
+          data-api-url="https://ourguide-b2-b.vercel.app"
           data-product-id="prod_ba70c68d-5282-4da1-ba99-c46daddf4fa3"
           data-agent-name="Assistant"
         ></Script>
