@@ -7,5 +7,71 @@
             "properties": {},
             "required": []
         }
+    },
+    {
+        "name": "submitCustomerServiceQuery",
+        "description": "Fill and submit the Contact support form on the customer service page (/help).",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Customer name (defaults to signed-in user name when available)."
+                },
+                "email": {
+                    "type": "string",
+                    "description": "Customer email (defaults to signed-in user email when available)."
+                },
+                "issueType": {
+                    "type": "string",
+                    "enum": [
+                        "order",
+                        "return",
+                        "shipping",
+                        "payment",
+                        "account",
+                        "product",
+                        "other"
+                    ],
+                    "description": "Issue category for the support request."
+                },
+                "priority": {
+                    "type": "string",
+                    "enum": ["low", "medium", "high"],
+                    "description": "Priority selection in the form.",
+                    "default": "medium"
+                },
+                "orderNumber": {
+                    "type": "string",
+                    "description": "Optional order number (e.g., an order id)."
+                },
+                "message": {
+                    "type": "string",
+                    "description": "Support message (recommended 10+ characters)."
+                }
+            },
+            "required": ["issueType", "message"]
+        }
+    },
+    {
+        "name": "updateShippingAddress",
+        "description": "Update and save the user's shipping address in account profile.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "street": { "type": "string" },
+                "city": { "type": "string" },
+                "state": { "type": "string" },
+                "zipCode": { "type": "string" },
+                "country": { "type": "string" },
+                "navigateTo": {
+                    "type": "string",
+                    "enum": ["none", "account", "checkout"],
+                    "default": "none",
+                    "description": "Optional navigation after saving the address."
+                }
+            },
+            "required": ["street", "city", "state", "zipCode", "country"]
+        }
     }
 ]

@@ -34,6 +34,15 @@ function AccountSettings() {
   const [dob, setDob] = useState(user?.dob ?? "");
   const [gender, setGender] = useState<Gender>("prefer_not_to_say");
 
+  // Shipping address (API-backed)
+  const [shippingStreet, setShippingStreet] = useState(user?.address?.street ?? "");
+  const [shippingCity, setShippingCity] = useState(user?.address?.city ?? "");
+  const [shippingState, setShippingState] = useState(user?.address?.state ?? "");
+  const [shippingZipCode, setShippingZipCode] = useState(user?.address?.zipCode ?? "");
+  const [shippingCountry, setShippingCountry] = useState(user?.address?.country ?? "");
+  const [shippingErrors, setShippingErrors] = useState<Record<string, string>>({});
+  const [savingShipping, setSavingShipping] = useState(false);
+
   const [profileErrors, setProfileErrors] = useState<Record<string, string>>({});
   const [savingProfile, setSavingProfile] = useState(false);
 
@@ -116,7 +125,21 @@ function AccountSettings() {
     setFullName(user?.name ?? "");
     setEmail(user?.email ?? "");
     setDob(user?.dob ?? "");
-  }, [user?.name, user?.email, user?.dob]);
+    setShippingStreet(user?.address?.street ?? "");
+    setShippingCity(user?.address?.city ?? "");
+    setShippingState(user?.address?.state ?? "");
+    setShippingZipCode(user?.address?.zipCode ?? "");
+    setShippingCountry(user?.address?.country ?? "");
+  }, [
+    user?.name,
+    user?.email,
+    user?.dob,
+    user?.address?.street,
+    user?.address?.city,
+    user?.address?.state,
+    user?.address?.zipCode,
+    user?.address?.country,
+  ]);
 
   function persistLocal(partial: Record<string, unknown>) {
     try {
@@ -191,6 +214,43 @@ function AccountSettings() {
       setToast({ message: "Profile saved", type: "success" });
     } finally {
       setSavingProfile(false);
+    }
+  }
+
+  function validateShippingAddress(): boolean {
+    const next: Record<string, string> = {};
+    if (!shippingStreet.trim()) next.street = "Street is required";
+    if (!shippingCity.trim()) next.city = "City is required";
+    if (!shippingState.trim()) next.state = "State is required";
+    if (!shippingZipCode.trim()) next.zipCode = "Zip code is required";
+    if (!shippingCountry.trim()) next.country = "Country is required";
+    setShippingErrors(next);
+    return Object.keys(next).length === 0;
+  }
+
+  async function onSaveShippingAddress() {
+    setToast(null);
+    if (!validateShippingAddress()) return;
+    setSavingShipping(true);
+    try {
+      const result = await updateProfile({
+        address: {
+          street: shippingStreet.trim(),
+          city: shippingCity.trim(),
+          state: shippingState.trim(),
+          zipCode: shippingZipCode.trim(),
+          country: shippingCountry.trim(),
+        },
+      });
+
+      if (!result.success) {
+        setToast({ message: result.error ?? "Address update failed", type: "error" });
+        return;
+      }
+
+      setToast({ message: "Shipping address saved", type: "success" });
+    } finally {
+      setSavingShipping(false);
     }
   }
 
@@ -430,6 +490,84 @@ function AccountSettings() {
                     { value: "prefer_not_to_say", label: "Prefer not to say" },
                   ]}
                 />
+              </div>
+            </div>
+          </SectionCard>
+
+          {/* Shipping Address */}
+          <SectionCard title="Shipping Address" subtitle="Where we should deliver your orders." className="enter d1b">
+            <div id="shipping-address-form">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
+                  <FloatingInput
+                    id="shipping-street"
+                    label="Street Address"
+                    value={shippingStreet}
+                    onChange={(v) => {
+                      setShippingStreet(v);
+                      if (shippingErrors.street) setShippingErrors((p) => ({ ...p, street: "" }));
+                    }}
+                    error={shippingErrors.street}
+                    autoComplete="address-line1"
+                  />
+                </div>
+                <FloatingInput
+                  id="shipping-city"
+                  label="City"
+                  value={shippingCity}
+                  onChange={(v) => {
+                    setShippingCity(v);
+                    if (shippingErrors.city) setShippingErrors((p) => ({ ...p, city: "" }));
+                  }}
+                  error={shippingErrors.city}
+                  autoComplete="address-level2"
+                />
+                <FloatingInput
+                  id="shipping-state"
+                  label="State / Province"
+                  value={shippingState}
+                  onChange={(v) => {
+                    setShippingState(v);
+                    if (shippingErrors.state) setShippingErrors((p) => ({ ...p, state: "" }));
+                  }}
+                  error={shippingErrors.state}
+                  autoComplete="address-level1"
+                />
+                <FloatingInput
+                  id="shipping-zipCode"
+                  label="Zip / Postal Code"
+                  value={shippingZipCode}
+                  onChange={(v) => {
+                    setShippingZipCode(v);
+                    if (shippingErrors.zipCode) setShippingErrors((p) => ({ ...p, zipCode: "" }));
+                  }}
+                  error={shippingErrors.zipCode}
+                  autoComplete="postal-code"
+                />
+                <FloatingInput
+                  id="shipping-country"
+                  label="Country"
+                  value={shippingCountry}
+                  onChange={(v) => {
+                    setShippingCountry(v);
+                    if (shippingErrors.country) setShippingErrors((p) => ({ ...p, country: "" }));
+                  }}
+                  error={shippingErrors.country}
+                  autoComplete="country-name"
+                />
+              </div>
+
+              <div className="mt-4 flex items-center justify-end">
+                <button
+                  id="save-shipping-address"
+                  type="button"
+                  onClick={onSaveShippingAddress}
+                  disabled={savingShipping}
+                  className="inline-flex items-center gap-2 rounded-xl bg-gray-900 text-white px-4 py-2.5 text-sm font-semibold hover:bg-gray-800 disabled:opacity-60 disabled:cursor-not-allowed transition"
+                >
+                  {savingShipping ? <Spinner light /> : <SaveIcon />}
+                  Save address
+                </button>
               </div>
             </div>
           </SectionCard>
