@@ -123,6 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     clearToken();
     setUser(null);
     ourguideResetUser();
+    fetch("/api/auth/signout", { method: "POST" }).catch(() => {});
   }, []);
 
   const updateProfile = useCallback(

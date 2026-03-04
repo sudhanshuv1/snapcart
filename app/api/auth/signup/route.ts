@@ -42,7 +42,15 @@ export async function POST(request: NextRequest) {
 
     const token = signToken(user._id.toString());
 
-    return NextResponse.json({ user: userToPublic(user), token }, { status: 201 });
+    const response = NextResponse.json({ user: userToPublic(user), token }, { status: 201 });
+    response.cookies.set("shopclone-session", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60,
+    });
+    return response;
   } catch (error) {
     console.error("Signup error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

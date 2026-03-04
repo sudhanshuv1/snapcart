@@ -65,8 +65,12 @@ function getOurguideHeaderToken(request: NextRequest): string | null {
   return raw.trim() || null;
 }
 
+function getCookieToken(request: NextRequest): string | null {
+  return request.cookies.get("shopclone-session")?.value ?? null;
+}
+
 export async function getAppAuthUser(request: NextRequest): Promise<IUser | null> {
-  const token = getBearerToken(request);
+  const token = getBearerToken(request) ?? getCookieToken(request);
   if (!token) return null;
 
   try {
@@ -79,7 +83,7 @@ export async function getAppAuthUser(request: NextRequest): Promise<IUser | null
 }
 
 export async function getAuthUser(request: NextRequest): Promise<IUser | null> {
-  const token = getBearerToken(request) ?? getOurguideHeaderToken(request);
+  const token = getBearerToken(request) ?? getOurguideHeaderToken(request) ?? getCookieToken(request);
   if (!token) return null;
 
   // 1) Normal app auth token (JWT_SECRET)
