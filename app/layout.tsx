@@ -48,8 +48,8 @@ export default function RootLayout({
           </AppProvider>
         </AuthProvider>
         <Script 
-          src="/ourguide-b2b-widget.iife.js"
-          data-api-url={process.env.NEXT_PUBLIC_OURGUIDE_API_URL || "https://dashboard.ourguide.ai"}
+          src="https://dashboard.ourguide.ai/ourguide-b2b-widget.iife.js"
+          data-api-url="https://dashboard.ourguide.ai"
           data-product-id="prod_35db7bb0-caad-423e-ba29-ebf34e7c206a"
           data-agent-name="Assistant"
         ></Script>

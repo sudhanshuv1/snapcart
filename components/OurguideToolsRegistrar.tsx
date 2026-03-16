@@ -65,9 +65,6 @@ export function OurguideToolsRegistrar() {
       await waitFor(() => (window.location.pathname === path ? true : null), { timeoutMs: 6000 });
     }
 
-    let attempts = 0;
-    const MAX_ATTEMPTS = 20;
-
     const register = () => {
       if (typeof window.ourguide === "function") {
         console.log("[OurguideTools] Registering tools. Cart items:", items.length, "| Total:", cartTotal);
@@ -348,13 +345,8 @@ export function OurguideToolsRegistrar() {
         });
         console.log("[OurguideTools] Tools registered successfully.");
       } else {
-        attempts++;
-        if (attempts < MAX_ATTEMPTS) {
-          console.log(`[OurguideTools] window.ourguide not ready, retrying in 2s... (${attempts}/${MAX_ATTEMPTS})`);
-          setTimeout(register, 2000);
-        } else {
-          console.warn("[OurguideTools] window.ourguide never became available after max retries. Widget may not be loaded.");
-        }
+        console.log("[OurguideTools] window.ourguide not ready, retrying in 150ms...");
+        setTimeout(register, 2000);
       }
     };
 
