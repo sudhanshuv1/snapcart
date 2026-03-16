@@ -55,7 +55,7 @@ function CheckoutContent() {
     <div className="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-8">
       <h1 className="text-2xl font-bold text-gray-900 mb-8">Checkout</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] xl:grid-cols-[1fr_380px] gap-8 lg:gap-10">
         {/* Left — Form sections */}
         <div className="space-y-8">
           {/* Shipping address */}

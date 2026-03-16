@@ -284,17 +284,17 @@ export default function Navbar() {
                 />
               </svg>
             </span>
-            <span className="leading-none">
+            <span className="hidden sm:inline leading-none">
               Shop<span className="text-gray-500">Clone</span>
             </span>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
             <Link
               href="/"
               onClick={closeAllMenus}
-              className="inline-flex items-center rounded-xl px-3 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-black/5 hover:text-gray-900"
+              className="inline-flex items-center rounded-xl px-2.5 py-2 text-[13px] xl:text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-black/5 hover:text-gray-900"
             >
               Home
             </Link>
@@ -308,7 +308,7 @@ export default function Navbar() {
               <button
                 id="nav-products-trigger"
                 type="button"
-                className="inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-black/5 hover:text-gray-900"
+                className="inline-flex items-center gap-1 rounded-xl px-2.5 py-2 text-[13px] xl:text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-black/5 hover:text-gray-900"
                 aria-haspopup="menu"
                 aria-expanded={isProductsOpen}
                 onFocus={() => setIsProductsOpen(true)}
@@ -331,11 +331,11 @@ export default function Navbar() {
                 aria-label="Products"
                 className={
                   isProductsOpen
-                    ? "pointer-events-auto absolute left-0 top-[calc(100%+0.65rem)] w-[44rem] origin-top translate-y-0 rounded-2xl border border-black/10 bg-white/80 p-5 opacity-100 shadow-xl backdrop-blur-xl transition-all duration-200 ease-in-out"
-                    : "pointer-events-none absolute left-0 top-[calc(100%+0.65rem)] w-[44rem] origin-top -translate-y-2 rounded-2xl border border-black/10 bg-white/80 p-5 opacity-0 shadow-xl backdrop-blur-xl transition-all duration-200 ease-in-out"
+                    ? "pointer-events-auto absolute left-0 top-[calc(100%+0.65rem)] w-[min(44rem,calc(100vw-2rem))] origin-top translate-y-0 rounded-2xl border border-black/10 bg-white/80 p-4 lg:p-5 opacity-100 shadow-xl backdrop-blur-xl transition-all duration-200 ease-in-out"
+                    : "pointer-events-none absolute left-0 top-[calc(100%+0.65rem)] w-[min(44rem,calc(100vw-2rem))] origin-top -translate-y-2 rounded-2xl border border-black/10 bg-white/80 p-4 lg:p-5 opacity-0 shadow-xl backdrop-blur-xl transition-all duration-200 ease-in-out"
                 }
               >
-                <div className="grid grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
                   {PRODUCT_CATEGORIES.map((cat) => (
                     <div key={cat.title} className="min-w-0">
                       <div className="mb-3 flex items-center gap-2">
@@ -380,32 +380,32 @@ export default function Navbar() {
             <Link
               href="/search?q=deal"
               onClick={closeAllMenus}
-              className="inline-flex items-center rounded-xl px-3 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-black/5 hover:text-gray-900"
+              className="inline-flex items-center rounded-xl px-2.5 py-2 text-[13px] xl:text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-black/5 hover:text-gray-900"
             >
               Deals
             </Link>
             <Link
               href="/help"
               onClick={closeAllMenus}
-              className="inline-flex items-center rounded-xl px-3 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-black/5 hover:text-gray-900"
+              className="inline-flex items-center rounded-xl px-2.5 py-2 text-[13px] xl:text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-black/5 hover:text-gray-900"
             >
               About
             </Link>
             <Link
               href="/help?tab=contact"
               onClick={closeAllMenus}
-              className="inline-flex items-center rounded-xl px-3 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-black/5 hover:text-gray-900"
+              className="inline-flex items-center rounded-xl px-2.5 py-2 text-[13px] xl:text-sm font-medium text-gray-600 transition-colors duration-200 hover:bg-black/5 hover:text-gray-900"
             >
               Contact
             </Link>
           </nav>
 
           {/* Desktop Search */}
-          <div className="hidden flex-1 justify-center md:flex">
+          <div className="hidden flex-1 justify-center lg:flex">
             <div
               ref={searchWrapRef}
               className={`relative max-w-full transition-[width] duration-200 ease-in-out ${
-                isSearchOpen ? "w-[22rem] sm:w-[28rem] lg:w-[36rem]" : "w-[18rem] sm:w-[22rem] lg:w-[26rem]"
+                isSearchOpen ? "w-[20rem] xl:w-[28rem] 2xl:w-[36rem]" : "w-[14rem] xl:w-[20rem] 2xl:w-[26rem]"
               }`}
             >
               <form onSubmit={handleSearch} className="w-full">
@@ -524,11 +524,11 @@ export default function Navbar() {
           </div>
 
           {/* Right actions */}
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
             {/* Mobile: Search + Menu */}
             <button
               type="button"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-black/10 bg-white/55 text-gray-700 shadow-sm transition-colors duration-200 hover:bg-white/85 hover:text-gray-900 md:hidden"
+              className="inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-black/10 bg-white/55 text-gray-700 shadow-sm transition-colors duration-200 hover:bg-white/85 hover:text-gray-900 lg:hidden"
               title="Search"
               onClick={() => {
                 setIsSearchOpen(true);
@@ -538,7 +538,7 @@ export default function Navbar() {
               }}
             >
               <span className="sr-only">Search</span>
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -552,11 +552,11 @@ export default function Navbar() {
             <Link
               href="/wishlist"
               onClick={closeAllMenus}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-black/10 bg-white/55 text-gray-700 shadow-sm transition-colors duration-200 hover:bg-white/85 hover:text-gray-900"
+              className="inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-black/10 bg-white/55 text-gray-700 shadow-sm transition-colors duration-200 hover:bg-white/85 hover:text-gray-900"
               title="Wishlist"
               aria-label="Wishlist"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -570,11 +570,11 @@ export default function Navbar() {
             <Link
               href="/cart"
               onClick={closeAllMenus}
-              className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-black/10 bg-white/55 text-gray-700 shadow-sm transition-colors duration-200 hover:bg-white/85 hover:text-gray-900"
+              className="relative inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-black/10 bg-white/55 text-gray-700 shadow-sm transition-colors duration-200 hover:bg-white/85 hover:text-gray-900"
               title="Cart"
               aria-label="Cart"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -678,7 +678,7 @@ export default function Navbar() {
             {/* Hamburger */}
             <button
               type="button"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-black/10 bg-white/55 text-gray-700 shadow-sm transition-colors duration-200 hover:bg-white/85 hover:text-gray-900 md:hidden"
+              className="inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-black/10 bg-white/55 text-gray-700 shadow-sm transition-colors duration-200 hover:bg-white/85 hover:text-gray-900 lg:hidden"
               title={isMobileOpen ? "Close menu" : "Open menu"}
               onClick={() => {
                 setIsMobileOpen((v) => !v);
@@ -687,7 +687,7 @@ export default function Navbar() {
               aria-label={isMobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMobileOpen}
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isMobileOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
@@ -702,11 +702,11 @@ export default function Navbar() {
         <div
           className={
             isMobileOpen
-              ? "pointer-events-auto absolute left-0 right-0 top-full z-[55] translate-y-0 border-b border-black/10 bg-white/85 opacity-100 shadow-lg backdrop-blur-xl transition-all duration-200 ease-in-out"
-              : "pointer-events-none absolute left-0 right-0 top-full z-[55] -translate-y-2 border-b border-black/10 bg-white/85 opacity-0 shadow-lg backdrop-blur-xl transition-all duration-200 ease-in-out"
+              ? "pointer-events-auto absolute left-0 right-0 top-full z-[55] max-h-[calc(100vh-4rem)] translate-y-0 overflow-y-auto overscroll-contain border-b border-black/10 bg-white/85 opacity-100 shadow-lg backdrop-blur-xl transition-all duration-200 ease-in-out"
+              : "pointer-events-none absolute left-0 right-0 top-full z-[55] max-h-[calc(100vh-4rem)] -translate-y-2 overflow-y-auto border-b border-black/10 bg-white/85 opacity-0 shadow-lg backdrop-blur-xl transition-all duration-200 ease-in-out"
           }
         >
-          <div className="space-y-1 p-3">
+          <div className="space-y-1 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             {/* Mobile search lives in the menu panel (full functionality + overlay). */}
             <div ref={mobileSearchWrapRef} className="pb-2">
               <form onSubmit={handleSearch} className="w-full">

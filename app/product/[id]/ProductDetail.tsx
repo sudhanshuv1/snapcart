@@ -142,8 +142,8 @@ export default function ProductDetail({ product }: { product: Product }) {
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-8">
       {/* Breadcrumb */}
-      <nav className="text-sm mb-6">
-        <ol className="flex items-center gap-2 text-gray-500">
+      <nav className="text-sm mb-6 overflow-x-auto">
+        <ol className="flex items-center gap-2 text-gray-500 whitespace-nowrap">
           <li>
             <Link href="/" className="hover:text-gray-900 hover:underline">
               Home
@@ -162,7 +162,7 @@ export default function ProductDetail({ product }: { product: Product }) {
         </ol>
       </nav>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
         {/* Left — Product image */}
         <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
           <Image
@@ -237,11 +237,11 @@ export default function ProductDetail({ product }: { product: Product }) {
           </div>
 
           {/* Action buttons */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
             <button
               onClick={handleAddToCart}
               disabled={added}
-              className={`w-full font-semibold py-3 px-6 rounded-lg transition-colors text-base ${
+              className={`flex-1 sm:min-w-[140px] font-semibold py-3 px-6 rounded-lg transition-colors text-base ${
                 added
                   ? "bg-green-500 text-white cursor-default"
                   : "bg-yellow-400 hover:bg-yellow-500 text-gray-900"
@@ -251,7 +251,7 @@ export default function ProductDetail({ product }: { product: Product }) {
             </button>
             <button
               onClick={handleBuyNow}
-              className="w-full bg-orange-500 hover:bg-orange-600 active:scale-[0.98] text-white font-semibold py-3 px-6 rounded-lg transition-all text-base"
+              className="flex-1 sm:min-w-[140px] bg-orange-500 hover:bg-orange-600 active:scale-[0.98] text-white font-semibold py-3 px-6 rounded-lg transition-all text-base"
             >
               Buy Now
             </button>
@@ -295,7 +295,7 @@ export default function ProductDetail({ product }: { product: Product }) {
 
       {/* Reviews Section */}
       <section className="mt-16 border-t border-gray-200 pt-10">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
           <h2 className="text-xl font-bold text-gray-900">
             Customer Reviews
             {productReviews.length > 0 && (

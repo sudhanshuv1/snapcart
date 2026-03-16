@@ -67,10 +67,10 @@ function CartContent() {
         {items.map(({ product, quantity }) => (
           <li
             key={product.id}
-            className="py-5 grid grid-cols-[80px_1fr] sm:grid-cols-[1fr_100px_120px_100px_40px] gap-4 items-center"
+            className="py-5 flex flex-col gap-3 sm:grid sm:grid-cols-[1fr_100px_120px_100px_40px] sm:gap-4 sm:items-center"
           >
             {/* Product — image + title */}
-            <div className="col-span-2 sm:col-span-1 flex items-center gap-4">
+            <div className="flex items-center gap-4">
               <Link
                 href={`/product/${product.id}`}
                 className="relative w-20 h-20 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden"
@@ -96,10 +96,17 @@ function CartContent() {
               </div>
             </div>
 
-            {/* Unit price */}
-            <div className="hidden sm:block text-sm text-gray-700 text-right">
-              ${product.price.toFixed(2)}
-            </div>
+            {/* Mobile price + quantity + subtotal + remove */}
+            <div className="flex items-center justify-between gap-3 sm:contents">
+              {/* Unit price — mobile only */}
+              <span className="text-sm text-gray-700 sm:hidden">
+                ${product.price.toFixed(2)}
+              </span>
+
+              {/* Unit price — desktop only */}
+              <div className="hidden sm:block text-sm text-gray-700 text-right">
+                ${product.price.toFixed(2)}
+              </div>
 
             {/* Quantity selector */}
             <div className="flex items-center sm:justify-center">
@@ -178,6 +185,7 @@ function CartContent() {
                   />
                 </svg>
               </button>
+            </div>
             </div>
           </li>
         ))}

@@ -126,7 +126,7 @@ export default function SearchPage() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr] gap-6 lg:gap-8 items-start">
             <aside className="lg:sticky lg:top-20">
               <ProductFilters
                 categories={DEFAULT_CATEGORIES}
@@ -144,13 +144,13 @@ export default function SearchPage() {
 
             <section>
               {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-6">
                   {Array.from({ length: 4 }).map((_, i) => (
                     <ProductCardSkeleton key={i} />
                   ))}
                 </div>
               ) : shownResults.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-6">
                   {shownResults.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}

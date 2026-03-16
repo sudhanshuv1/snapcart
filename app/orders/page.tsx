@@ -180,7 +180,7 @@ function OrdersContent() {
                   const canReturnReplace = order.status === "delivered";
 
                   return (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-col sm:flex-row flex-wrap gap-2">
                       <button
                         type="button"
                         onClick={() => handleOrderAction(order.id, "cancel")}
@@ -218,7 +218,7 @@ function OrdersContent() {
               {order.items.map(({ product, quantity }) => (
                 <li
                   key={product.id}
-                  className="px-5 py-4 flex items-center gap-4"
+                  className="px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4"
                 >
                   <Link
                     href={`/product/${product.id}`}
