@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Script from "next/script";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { AuthProvider } from "@/context/AuthContext";
 import { AppProvider } from "@/context/AppContext";
 import { OurguideToolsRegistrar } from "@/components/OurguideToolsRegistrar";
+import IntercomScript from "@/components/IntercomScript";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,8 +21,8 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "ShopClone",
-    template: "%s | ShopClone",
+    default: "SnapCart",
+    template: "%s | SnapCart",
   },
   description: "Your one-stop online shop",
 };
@@ -44,15 +44,9 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <Footer />
             </div>
-            <OurguideToolsRegistrar />
           </AppProvider>
+          <IntercomScript />
         </AuthProvider>
-        <Script 
-          src="https://dashboard.ourguide.ai/ourguide-b2b-widget.iife.js"
-          data-api-url="https://dashboard.ourguide.ai"
-          data-product-id="prod_35db7bb0-caad-423e-ba29-ebf34e7c206a"
-          data-agent-name="Assistant"
-        ></Script>
       </body>
     </html>
   );

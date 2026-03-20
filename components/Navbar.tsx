@@ -267,7 +267,7 @@ export default function Navbar() {
             href="/"
             onClick={closeAllMenus}
             className="group flex items-center gap-2 rounded-lg px-2 py-1.5 text-[15px] font-semibold tracking-tight text-gray-900 transition-colors duration-200 hover:text-gray-950"
-            aria-label="ShopClone Home"
+            aria-label="SnapCart Home"
           >
             <span className="relative grid h-8 w-8 place-items-center rounded-lg border border-black/10 bg-white/70 shadow-sm transition-transform duration-200 group-hover:scale-[1.02]">
               <svg
@@ -285,7 +285,7 @@ export default function Navbar() {
               </svg>
             </span>
             <span className="hidden sm:inline leading-none">
-              Shop<span className="text-gray-500">Clone</span>
+              Snap<span className="text-gray-500">Cart</span>
             </span>
           </Link>
 

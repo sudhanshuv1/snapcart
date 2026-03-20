@@ -82,7 +82,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-gray-800 mt-8 pt-6 text-center text-sm">
-          &copy; 2026 ShopClone. All rights reserved.
+          &copy; 2026 SnapCart. All rights reserved.
         </div>
       </div>
     </footer>

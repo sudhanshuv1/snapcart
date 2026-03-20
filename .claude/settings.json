@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(command -v pandoc)",
+      "Bash(command -v npx)",
+      "Bash(npx md-to-pdf:*)"
+    ]
+  }
+}

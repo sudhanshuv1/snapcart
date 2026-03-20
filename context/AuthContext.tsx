@@ -62,18 +62,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
     let intervalId: number | undefined;
 
-    async function identify() {
-      try {
-        const data = await apiGet<{ token: string }>("/api/ourguide-token");
-        if (cancelled) return;
-        ourguideIdentify({ token: data.token, name: userName });
-      } catch {
-        // Ignore: Ourguide is optional, and /api/ourguide-token may be disabled in some envs
-      }
-    }
+    // async function identify() {
+    //   try {
+    //     const data = await apiGet<{ token: string }>("/api/ourguide-token");
+    //     if (cancelled) return;
+    //     ourguideIdentify({ token: data.token, name: userName });
+    //   } catch {
+    //     // Ignore: Ourguide is optional, and /api/ourguide-token may be disabled in some envs
+    //   }
+    // }
 
-    identify();
-    intervalId = window.setInterval(identify, 50 * 60 * 1000);
+    // identify();
+    // intervalId = window.setInterval(identify, 50 * 60 * 1000);
 
     return () => {
       cancelled = true;
@@ -122,7 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = useCallback(() => {
     clearToken();
     setUser(null);
-    ourguideResetUser();
+    // ourguideResetUser();
     fetch("/api/auth/signout", { method: "POST" }).catch(() => {});
   }, []);
 
