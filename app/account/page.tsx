@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import RequireAuth from "@/components/RequireAuth";
 
@@ -1025,7 +1026,7 @@ function AvatarUploader({
       >
         {value ? (
           // Circular crop preview.
-          <img src={value} alt="Avatar" className="h-full w-full object-cover" />
+          <Image src={value} alt="Avatar" className="h-full w-full object-cover" fill />
         ) : (
           <div className="h-full w-full bg-gradient-to-b from-gray-100 to-white flex items-center justify-center">
             <span className="text-2xl font-bold text-gray-500">{initials}</span>

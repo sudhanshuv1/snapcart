@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { AuthProvider } from "@/context/AuthContext";
 import { AppProvider } from "@/context/AppContext";
-import { OurguideToolsRegistrar } from "@/components/OurguideToolsRegistrar";
 import IntercomScript from "@/components/IntercomScript";
 
 const geistSans = localFont({
