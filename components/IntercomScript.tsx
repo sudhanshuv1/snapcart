@@ -18,9 +18,45 @@ export default function IntercomScript() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (typeof window === "undefined" || !window.Intercom) return;
+    if (typeof window === "undefined") return;
+    const w = window as Window & { __intercomFetchPatched?: boolean };
+    if (w.__intercomFetchPatched) return;
+    w.__intercomFetchPatched = true;
+
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = async (input, init) => {
+      const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+      const isIntercom = url.includes("intercom.io");
+
+      if (isIntercom && init?.body && typeof init.body === "string") {
+        const body = init.body;
+        const hasAuthTokens = body.includes("auth_tokens") || body.includes("security_token");
+        if (hasAuthTokens) {
+          const match = body.match(/security_token"?\s*[:=]\s*"?([^"&,}]+)/);
+          console.log("[intercom] ✅ outgoing request contains security_token", {
+            url,
+            tokenPrefix: match?.[1]?.slice(0, 12) + "…",
+            tokenLen: match?.[1]?.length,
+          });
+        }
+      }
+      return originalFetch(input, init);
+    };
+    console.log("[intercom] fetch patched to observe outgoing Intercom requests");
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      console.log("[intercom] skip: no window");
+      return;
+    }
+    if (!window.Intercom) {
+      console.log("[intercom] skip: window.Intercom not ready");
+      return;
+    }
 
     if (user) {
+      console.log("[intercom] identifying user", { user_id: user.id, email: user.email });
       window.Intercom("update", {
         app_id: APP_ID,
         user_id: user.id,
@@ -29,9 +65,17 @@ export default function IntercomScript() {
       });
       const token = getToken();
       if (token) {
+        console.log("[intercom] setAuthTokens", {
+          tokenLen: token.length,
+          tokenPrefix: token.slice(0, 12) + "…",
+        });
         window.Intercom("setAuthTokens", { security_token: token });
+        console.log("[intercom] setAuthTokens call returned (fire-and-forget)");
+      } else {
+        console.warn("[intercom] no session token available — security_token NOT sent");
       }
     } else {
+      console.log("[intercom] no user — shutdown + anonymous boot");
       window.Intercom("shutdown");
       window.Intercom("boot", { app_id: APP_ID });
     }
