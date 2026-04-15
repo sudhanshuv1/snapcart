@@ -21,14 +21,16 @@ export default function IntercomScript() {
     if (typeof window === "undefined" || !window.Intercom) return;
 
     if (user) {
-      const token = getToken();
       window.Intercom("update", {
         app_id: APP_ID,
         user_id: user.id,
         name: user.name,
         email: user.email,
-        ...(token ? { auth_tokens: { security_token: token } } : {}),
       });
+      const token = getToken();
+      if (token) {
+        window.Intercom("setAuthTokens", { security_token: token });
+      }
     } else {
       window.Intercom("shutdown");
       window.Intercom("boot", { app_id: APP_ID });
