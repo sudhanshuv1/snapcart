@@ -7,8 +7,17 @@ import { getAuthUser } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
+    const authHeader = request.headers.get("authorization");
+    console.log("[orders] auth debug", {
+      ua: request.headers.get("user-agent"),
+      hasAuthHeader: !!authHeader,
+      authHeaderLen: authHeader?.length ?? 0,
+      authPrefix: authHeader?.slice(0, 14),
+      hasCookie: !!request.cookies.get("shopclone-session"),
+    });
     const user = await getAuthUser(request);
     if (!user) {
+      console.log("[orders] auth failed — getAuthUser returned null");
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 

@@ -71,13 +71,22 @@ function getCookieToken(request: NextRequest): string | null {
 
 export async function getAppAuthUser(request: NextRequest): Promise<IUser | null> {
   const token = getBearerToken(request) ?? getCookieToken(request);
-  if (!token) return null;
+  if (!token) {
+    console.log("[auth] getAppAuthUser: no token found on request");
+    return null;
+  }
 
   try {
     const payload = verifyToken(token);
     await dbConnect();
-    return await User.findById(payload.userId);
-  } catch {
+    const user = await User.findById(payload.userId);
+    if (!user) {
+      console.log("[auth] getAppAuthUser: token valid but user not found", { userId: payload.userId });
+    }
+    return user;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.log("[auth] getAppAuthUser: verify failed", { message, tokenLen: token.length });
     return null;
   }
 }
