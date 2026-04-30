@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { getToken } from "@/lib/api";
 
-const APP_ID = process.env.NEXT_PUBLIC_INTERCOM_APP_ID || "xido0746";
+const APP_ID = process.env.NEXT_PUBLIC_INTERCOM_APP_ID || "hhec07jb";
 
 declare global {
   interface Window {
@@ -23,26 +23,68 @@ export default function IntercomScript() {
     if (w.__intercomFetchPatched) return;
     w.__intercomFetchPatched = true;
 
+    const inspectBody = (url: string, method: string, body: unknown) => {
+      let bodyStr = "";
+      if (typeof body === "string") bodyStr = body;
+      else if (body instanceof URLSearchParams) bodyStr = body.toString();
+      else if (body instanceof FormData) {
+        const entries: string[] = [];
+        body.forEach((v, k) => entries.push(`${k}=${typeof v === "string" ? v : "[file]"}`));
+        bodyStr = entries.join("&");
+      }
+
+      const hasAuthTokens = bodyStr.includes("auth_tokens") || bodyStr.includes("security_token");
+      const snippet = bodyStr.slice(0, 300);
+      console.log(
+        `[intercom] ${hasAuthTokens ? "✅" : "→"} ${method} ${url}`,
+        { bodyLen: bodyStr.length, snippet, hasAuthTokens }
+      );
+      if (hasAuthTokens) {
+        const match = bodyStr.match(/security_token[^a-zA-Z0-9]+([A-Za-z0-9._-]+)/);
+        console.log("[intercom] 🎯 security_token delivered to Intercom", {
+          url,
+          tokenPrefix: match?.[1]?.slice(0, 12) + "…",
+          tokenLen: match?.[1]?.length,
+        });
+      }
+    };
+
+    // Patch fetch
     const originalFetch = window.fetch.bind(window);
     window.fetch = async (input, init) => {
       const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
-      const isIntercom = url.includes("intercom.io");
-
-      if (isIntercom && init?.body && typeof init.body === "string") {
-        const body = init.body;
-        const hasAuthTokens = body.includes("auth_tokens") || body.includes("security_token");
-        if (hasAuthTokens) {
-          const match = body.match(/security_token"?\s*[:=]\s*"?([^"&,}]+)/);
-          console.log("[intercom] ✅ outgoing request contains security_token", {
-            url,
-            tokenPrefix: match?.[1]?.slice(0, 12) + "…",
-            tokenLen: match?.[1]?.length,
-          });
-        }
+      if (url.includes("intercom")) {
+        inspectBody(url, init?.method || "GET", init?.body);
       }
       return originalFetch(input, init);
     };
-    console.log("[intercom] fetch patched to observe outgoing Intercom requests");
+
+    // Patch XMLHttpRequest
+    const OriginalXHR = window.XMLHttpRequest;
+    const PatchedXHR = function (this: XMLHttpRequest) {
+      const xhr = new OriginalXHR();
+      let reqUrl = "";
+      let reqMethod = "GET";
+      const origOpen = xhr.open.bind(xhr);
+      (xhr as XMLHttpRequest).open = function (method: string, url: string | URL) {
+        reqMethod = method;
+        reqUrl = typeof url === "string" ? url : url.href;
+        // eslint-disable-next-line prefer-rest-params
+        return origOpen.apply(xhr, arguments as unknown as Parameters<XMLHttpRequest["open"]>);
+      } as XMLHttpRequest["open"];
+      const origSend = xhr.send.bind(xhr);
+      (xhr as XMLHttpRequest).send = function (body?: Document | XMLHttpRequestBodyInit | null) {
+        if (reqUrl.includes("intercom")) {
+          inspectBody(reqUrl, reqMethod, body);
+        }
+        return origSend(body as XMLHttpRequestBodyInit);
+      };
+      return xhr;
+    } as unknown as typeof XMLHttpRequest;
+    PatchedXHR.prototype = OriginalXHR.prototype;
+    window.XMLHttpRequest = PatchedXHR;
+
+    console.log("[intercom] fetch + XHR patched to observe outgoing Intercom requests");
   }, []);
 
   useEffect(() => {
