@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { getToken } from "@/lib/api";
 
-const APP_ID = process.env.NEXT_PUBLIC_INTERCOM_APP_ID || "hhec07jb";
+const APP_ID = process.env.NEXT_PUBLIC_INTERCOM_APP_ID || "xido0746";
 
 declare global {
   interface Window {
