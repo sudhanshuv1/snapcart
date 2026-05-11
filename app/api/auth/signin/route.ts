@@ -34,6 +34,8 @@ export async function POST(request: NextRequest) {
     }
 
     const token = signToken(user._id.toString());
+    user.currentToken = token;
+    await user.save();
 
     const response = NextResponse.json({ user: userToPublic(user), token });
     response.cookies.set("shopclone-session", token, {

@@ -1,6 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { getAppAuthUser } from "@/lib/auth";
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+  const user = await getAppAuthUser(request);
+  if (user) {
+    user.currentToken = "";
+    await user.save();
+  }
+
   const response = NextResponse.json({ success: true });
   response.cookies.set("shopclone-session", "", {
     httpOnly: true,

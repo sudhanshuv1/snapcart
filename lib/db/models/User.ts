@@ -14,6 +14,7 @@ export interface IUser extends Document {
   dob: string;
   password: string;
   address: IUserAddress;
+  currentToken?: string;
   createdAt: Date;
 }
 
@@ -34,6 +35,7 @@ const UserSchema = new Schema<IUser>({
   dob: { type: String, default: "" },
   password: { type: String, required: true },
   address: { type: AddressSchema, default: () => ({}) },
+  currentToken: { type: String, default: "" },
   createdAt: { type: Date, default: Date.now },
 }, { collection: "users" });
 
